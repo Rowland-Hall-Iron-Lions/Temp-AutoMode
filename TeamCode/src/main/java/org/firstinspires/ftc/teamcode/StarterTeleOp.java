@@ -78,8 +78,8 @@ public class StarterTeleOp extends OpMode
         telemetry.addData("Status", "Initializing");
 
         /** Initialize the hardware variables. Note that the strings used here as parameters
-        * to 'get' must correspond to the names assigned during the robot configuration
-        * step (using the FTC Robot Controller app on the phone). */
+         * to 'get' must correspond to the names assigned during the robot configuration
+         * step (using the FTC Robot Controller app on the phone). */
         duckWheel = hardwareMap.get(DcMotor.class, "duckWheel");
         frontL  = hardwareMap.get(DcMotor.class, "leftFront");
         frontR = hardwareMap.get(DcMotor.class, "rightFront");
@@ -111,7 +111,7 @@ public class StarterTeleOp extends OpMode
 
 
         /* Most robots need the motor on one side to be reversed to drive forward.
-        * Reverse the motor that runs backwards when connected directly to the battery. */
+         * Reverse the motor that runs backwards when connected directly to the battery. */
         frontL.setDirection(DcMotor.Direction.FORWARD);
         backL.setDirection(DcMotor.Direction.FORWARD);
         frontR.setDirection(DcMotor.Direction.REVERSE);
@@ -121,7 +121,7 @@ public class StarterTeleOp extends OpMode
         intakeYL.setDirection(Servo.Direction.REVERSE);
         intakeYR.setDirection(Servo.Direction.FORWARD);
         duckWheel.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        liftclaw.setDirection(Servo.Direction.FORWARD);
 
 
 
@@ -136,7 +136,7 @@ public class StarterTeleOp extends OpMode
         intakeYL.setPosition(0.5);
         intakeYR.setPosition(0);
         closeClaw.setPosition(0);
-        liftclaw.setPosition(0);
+        liftclaw.setPosition(0.3);
 
     }
 
@@ -149,8 +149,8 @@ public class StarterTeleOp extends OpMode
     boolean clawClosed = false;
     boolean intakeDown =false;
     boolean duckOn = false;
-    boolean intakeOn = false;
-    double intakePow =0;
+    //boolean intakeOn = false;
+    //double intakePow =0;
     double armPow = 0;
     double clawPos = 0;
     double clawClose = 0;
@@ -178,6 +178,8 @@ public class StarterTeleOp extends OpMode
         boolean intakeChangePosB = gamepad1.b;
         boolean isClawA = gamepad2.a;
         boolean isClawB = gamepad2.b;
+        boolean clawLift = gamepad2.x;
+        boolean clawLower = gamepad2.y;
         boolean isDuckR = gamepad1.right_bumper;
         boolean isDuckL = gamepad1.left_bumper;
         double duckPower= 0;
@@ -186,23 +188,23 @@ public class StarterTeleOp extends OpMode
 
 
         if (armMove == 0){
-            armPow=0.00000000000000001;
+            armPow=0.000000000000001;
 
 
         }
-        else armPow= armMove * 0.75;
+        else armPow= armMove * 0.5;
 
-       if (isDuckR) {
-           if (!duckOn){
-               duckPower = 0.7;
-               duckOn = true;
+        if (isDuckR) {
+            if (!duckOn){
+                duckPower = 0.68;
+                duckOn = true;
 
-           }
-           else if (duckOn) {
-               duckPower = 0;
-               duckOn = false;
-           }
-       }
+            }
+            else if (duckOn) {
+                duckPower = 0;
+                duckOn = false;
+            }
+        }
 
         if (isDuckL) {
             if (!duckOn){
@@ -216,19 +218,19 @@ public class StarterTeleOp extends OpMode
             }
         }
 
-         if (strafe != 0 ) {
-             /* Strafing */
-             leftFPower = -strafe;
-             rightFPower = strafe;
-             leftBPower =  strafe;
-             rightBPower = -strafe;
+        if (strafe != 0 ) {
+            /* Strafing */
+            leftFPower = -strafe;
+            rightFPower = strafe;
+            leftBPower =  strafe;
+            rightBPower = -strafe;
         }
 
         else if (drive != 0 || turn != 0) {
-          leftFPower = Range.clip(drive + turn, -1.0, 1.0);
-          rightFPower = Range.clip(drive - turn, -1.0, 1.0);
-          leftBPower = Range.clip(drive + turn, -1.0, 1.0);
-          rightBPower = Range.clip(drive - turn, -1.0, 1.0);
+            leftFPower = Range.clip(drive + turn, -1.0, 1.0);
+            rightFPower = Range.clip(drive - turn, -1.0, 1.0);
+            leftBPower = Range.clip(drive + turn, -1.0, 1.0);
+            rightBPower = Range.clip(drive - turn, -1.0, 1.0);
         } else {
             leftFPower = 0;
             rightFPower = 0;
@@ -236,7 +238,7 @@ public class StarterTeleOp extends OpMode
             rightBPower = 0;
         }
 
-        if (intakeChangePosA) {
+       /* if (intakeChangePosA) {
 
                 intakeYL.setPosition(0.4);
                 intakeYR.setPosition(0.4);
@@ -250,36 +252,45 @@ public class StarterTeleOp extends OpMode
 
 
 
-       if (isIntake){
+       /*if (isIntake){
            if (!intakeOn)
            intakePow = 1;
+           intakeR.setPower(intakePow);
+           intakeL.setPower(intakePow);
            intakeOn = true;
 
-        } else {
+
+        /*} else if (!isIntake){
             intakePow = 0;
+           intakeR.setPower(intakePow);
+           intakeL.setPower(intakePow);
             intakeOn = false;
         }
-
+*/
 
         if (isClawA) {
-            clawPos =0.8;
+
             clawClose=0.8;
 
-                    }
+        }
         if (isClawB) {
-            clawPos =0;
             clawClose = 0;
         }
 
-
+        if (clawLift) {
+            clawPos = 0.7;
+        }
+        if (clawLower) {
+            clawPos = 0.3;
+        }
 
 
         frontL.setPower(leftFPower);
         backL.setPower(leftBPower);
         frontR.setPower(rightFPower);
         backR.setPower(rightBPower);
-        intakeR.setPower(intakePow);
-        intakeL.setPower(intakePow);
+        // intakeR.setPower(intakePow);
+        // intakeL.setPower(intakePow);
         duckWheel.setPower(duckPower);
         extender.setPower(extension * 0.5);
         arm.setPower(armPow);
@@ -289,7 +300,8 @@ public class StarterTeleOp extends OpMode
         /**  Show the elapsed game time and wheel power. */
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "front left (%.2f), front right (%.2f), back left (%.2f), back right (%.2f)", leftFPower, rightFPower,leftBPower, rightBPower);
-        telemetry.addData("Intake Servoss",intakePow);
+        // telemetry.addData("Intake Servos",intakePow);
+        telemetry.addData("Claw Positions" + clawClose, clawPos);
     }
 
     /** Code to run ONCE after the driver hits STOP. */
