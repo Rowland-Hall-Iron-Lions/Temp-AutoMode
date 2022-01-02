@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -38,9 +40,34 @@ public class autoRedLeft extends LinearOpMode {
         // Set Directions of Motors
         duckWheel.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        //Declare Trajectories
+        // Declare Trajectories
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        // Trajectory to get to the duck spinner from our starting position
+        Trajectory toDuckSpinner = drive.trajectoryBuilder(new Pose2d(-35, -58, 0))
+                .lineToLinearHeading(new Pose2d(-58, -58, Math.toRadians(0)))
+                .build();
+        // Trajectory to park  our robot fully within the team "box". This scores extra points
+        Trajectory park = drive.trajectoryBuilder(drive.getPoseEstimate())
+                .strafeLeft(23)
+                .build();
 
+        // Run while the Autonomous mode is active
+        waitForStart();
+        while (opModeIsActive()) {
+            // Update telemetry status to show that it is Running
+            telemetry.addData("Status", "Running");
+            telemetry.update();
 
+            // Follow Trajectories. This is what the robot will actually do
+            drive.followTrajectory(toDuckSpinner);
+            duckWheel.setPower(25);
+            sleep(5000);
+            duckWheel.setPower(0);
+            drive.followTrajectory(park);
+            sleep(5000);
+
+            //Stop the Autonomous mode after we finish parking
+            return;
+        }
     }
 }
