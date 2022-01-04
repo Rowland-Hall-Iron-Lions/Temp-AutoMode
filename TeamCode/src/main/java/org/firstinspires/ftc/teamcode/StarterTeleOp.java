@@ -188,7 +188,7 @@ public class StarterTeleOp extends OpMode
 
 
         if (armMove == 0){
-            armPow=0.000000000000001;
+            armPow=0.001;
 
 
         }
@@ -196,7 +196,7 @@ public class StarterTeleOp extends OpMode
 
         if (isDuckR) {
             if (!duckOn){
-                duckPower = 0.68;
+                duckPower = 0.69;
                 duckOn = true;
 
             }
@@ -208,7 +208,7 @@ public class StarterTeleOp extends OpMode
 
         if (isDuckL) {
             if (!duckOn){
-                duckPower = -1;
+                duckPower = -0.69;
                 duckOn = true;
 
             }
