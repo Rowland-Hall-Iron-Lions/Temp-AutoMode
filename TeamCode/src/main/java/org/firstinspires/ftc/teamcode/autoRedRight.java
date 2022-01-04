@@ -43,12 +43,16 @@ public class autoRedRight extends LinearOpMode{
         // Declare Trajectories
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         // Trajectory to get to the duck spinner from our starting position
-        Trajectory toDuckSpinner = drive.trajectoryBuilder(new Pose2d(-35, -58, 0))
-                .lineToLinearHeading(new Pose2d(-58, -58, Math.toRadians(0)))
+        Trajectory toShippingHub = drive.trajectoryBuilder(new Pose2d(-12, -59, Math.toRadians(90)))
+                .forward(15)
                 .build();
-        // Trajectory to park  our robot fully within the team "box". This scores extra points
+        // Trajectory to get to the entrance for the warehouse(edge)
+        Trajectory readyForPark = drive.trajectoryBuilder(drive.getPoseEstimate())
+                .lineToSplineHeading(new Pose2d(12, -62, Math.toRadians(0)))
+                .build();
+        // Trajectory to drive forward and park inside the warehouse
         Trajectory park = drive.trajectoryBuilder(drive.getPoseEstimate())
-                .strafeLeft(23)
+                .forward(15)
                 .build();
 
         // Run while the Autonomous mode is active
@@ -59,14 +63,12 @@ public class autoRedRight extends LinearOpMode{
             telemetry.update();
 
             // Follow Trajectories. This is what the robot will actually do
-            drive.followTrajectory(toDuckSpinner);
-            duckWheel.setPower(25);
-            sleep(5000);
-            duckWheel.setPower(0);
+            drive.followTrajectory(toShippingHub);
+            // TODO: Claw Movement at shipping hub
+            drive.followTrajectory(readyForPark);
             drive.followTrajectory(park);
-            sleep(5000);
 
-            //Stop the Autonomous mode after we finish parking
+            // Stop the Autonomous mode after we finish parking
             return;
         }
     }

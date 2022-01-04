@@ -42,30 +42,31 @@ public class autoBlueLeft extends LinearOpMode {
 
         //Declare Trajectories
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        // Trajectory to get to the duck spinner from our starting position
-        Trajectory toDuckSpinner =  drive.trajectoryBuilder(new Pose2d(-35, 58, 0))
-                .lineToLinearHeading(new Pose2d(-58, 58, Math.toRadians(0)))
+        // Trajectory to get to the shipping hub to drop our preload box
+        Trajectory toShippingHub = drive.trajectoryBuilder(new Pose2d(12, 58, Math.toRadians(180)))
+                .forward(15)
                 .build();
-        // Trajectory to park  our robot fully within the team "box".
-        // This scores extra points
+        // Trajectory to get to the entrance for the warehouse(edge)
+        Trajectory readyForPark = drive.trajectoryBuilder(drive.getPoseEstimate())
+                .lineToSplineHeading(new Pose2d(12, 62, Math.toRadians(0)))
+                .build();
+        // Trajectory to drive forward and park inside the warehouse
         Trajectory park = drive.trajectoryBuilder(drive.getPoseEstimate())
-                .strafeRight(23)
+                .forward(15)
                 .build();
 
         // Run While the Autonomous Mode is Active
         waitForStart();
-        while(opModeIsActive()){
+        while (opModeIsActive()){
             // Update telemetry status to show that it is running
             telemetry.addData("Status", "Running");
             telemetry.update();
 
             // Follow trajectories. This is what the robot will actually do
-            drive.followTrajectory(toDuckSpinner);
-            duckWheel.setPower(25);
-            sleep(5000);
-            duckWheel.setPower(0);
+            drive.followTrajectory(toShippingHub);
+            // TODO: NEW INTAKE MOVEMENT
+            drive.followTrajectory(readyForPark);
             drive.followTrajectory(park);
-            sleep(5000);
 
             // Stop the Autonomous Mode after we finish parking
             return;
