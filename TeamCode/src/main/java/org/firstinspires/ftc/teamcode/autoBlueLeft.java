@@ -12,8 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-@Autonomous (name="autoBlueLeft")
-
+@Autonomous
 public class autoBlueLeft extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 

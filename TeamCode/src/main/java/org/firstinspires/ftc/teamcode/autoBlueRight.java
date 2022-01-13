@@ -11,12 +11,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-<<<<<<< HEAD
 
 @Autonomous
-=======
-@Autonomous(name="autoBlueRight")
->>>>>>> 031540335157c4494e4e991cbd9e4e0529323748
 public class autoBlueRight extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
