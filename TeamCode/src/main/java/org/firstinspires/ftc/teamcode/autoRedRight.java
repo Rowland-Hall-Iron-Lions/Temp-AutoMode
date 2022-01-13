@@ -64,7 +64,11 @@ public class autoRedRight extends LinearOpMode{
 
             // Follow Trajectories. This is what the robot will actually do
             drive.followTrajectory(toShippingHub);
-            // TODO: Claw Movement at shipping hub
+            intakeR.setPower(2.0);
+            intakeL.setPower(2.0);
+            sleep(5000);
+            intakeR.setPower(0);
+            intakeL.setPower(0);
             drive.followTrajectory(readyForPark);
             drive.followTrajectory(park);
 

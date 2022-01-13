@@ -64,7 +64,11 @@ public class autoBlueLeft extends LinearOpMode {
 
             // Follow trajectories. This is what the robot will actually do
             drive.followTrajectory(toShippingHub);
-            // TODO: NEW INTAKE MOVEMENT
+            intakeR.setPower(2.0);
+            intakeL.setPower(2.0);
+            sleep(5000);
+            intakeR.setPower(0);
+            intakeL.setPower(0);
             drive.followTrajectory(readyForPark);
             drive.followTrajectory(park);
 
