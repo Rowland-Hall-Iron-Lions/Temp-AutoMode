@@ -137,7 +137,8 @@ public class ImprovedTeleOp extends OpMode
     boolean intakeOn = false;
     boolean duckOn = false;
     double armPow = 0;
-    double intakePow = 0;
+
+
 
 
 
@@ -149,6 +150,7 @@ public class ImprovedTeleOp extends OpMode
         double rightFPower;
         double leftBPower ;
         double rightBPower;
+        double intakePow;
 
 
 
@@ -159,8 +161,8 @@ public class ImprovedTeleOp extends OpMode
         double drive = -gamepad1.right_stick_y;
         double turn  =  gamepad1.left_stick_x ;
         double strafe = gamepad1.right_stick_x;
-        boolean isIntakeA = gamepad1.a;
-        boolean isIntakeB = gamepad1.b;
+        double isIntakeA = gamepad2.left_trigger;
+        double isIntakeB = gamepad2.right_trigger;
         boolean isDuckR = gamepad1.right_bumper;
         boolean isDuckL = gamepad1.left_bumper;
         double duckPower= 0;
@@ -170,38 +172,24 @@ public class ImprovedTeleOp extends OpMode
 
 
 
-        if (isIntakeA) {
-            if (!intakeOn){
-                intakePow = 0.75;
-                intakeOn = true;
-
-            }
-            else if (intakeOn) {
-                intakePow = 0;
-                intakeOn = false;
-            }
+        if (isIntakeA !=0) {
+            intakePow = isIntakeA;
         }
-
-        if (isIntakeB) {
-            if (!intakeOn){
-                intakePow = -0.75;
-                intakeOn = true;
-
-            }
-            else if (intakeOn) {
-                intakePow = 0;
-                intakeOn = false;
-            }
+        else if (isIntakeB !=0){
+            intakePow = -1 * isIntakeB;
         }
+        else intakePow = 0;
 
 
-        if (armMove == 0){
+       /* if (armMove == 0){
             armPow=0.001;
 
 
         }
-        else armPow= armMove * 0.5;
 
+
+        else armPow= armMove * 0.5;
+        */
         if (isDuckR) {
             if (!duckOn){
                 duckPower = 0.69;
