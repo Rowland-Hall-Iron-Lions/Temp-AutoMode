@@ -51,7 +51,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list. */
 
 
-@TeleOp(name="Starter TeleOp", group="Iterative Opmode")
+@TeleOp(name="Improved TeleOP TeleOp", group="Iterative Opmode")
 
 // @Disabled
 public class ImprovedTeleOp extends OpMode
@@ -159,7 +159,8 @@ public class ImprovedTeleOp extends OpMode
         double drive = -gamepad1.right_stick_y;
         double turn  =  gamepad1.left_stick_x ;
         double strafe = gamepad1.right_stick_x;
-        boolean isIntake = gamepad1.a;
+        boolean isIntakeA = gamepad1.a;
+        boolean isIntakeB = gamepad1.b;
         boolean isDuckR = gamepad1.right_bumper;
         boolean isDuckL = gamepad1.left_bumper;
         double duckPower= 0;
@@ -169,9 +170,21 @@ public class ImprovedTeleOp extends OpMode
 
 
 
-        if (isIntake) {
+        if (isIntakeA) {
             if (!intakeOn){
                 intakePow = 0.75;
+                intakeOn = true;
+
+            }
+            else if (intakeOn) {
+                intakePow = 0;
+                intakeOn = false;
+            }
+        }
+
+        if (isIntakeB) {
+            if (!intakeOn){
+                intakePow = -0.75;
                 intakeOn = true;
 
             }
@@ -252,6 +265,10 @@ public class ImprovedTeleOp extends OpMode
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "front left (%.2f), front right (%.2f), back left (%.2f), back right (%.2f)", leftFPower, rightFPower,leftBPower, rightBPower);
         telemetry.addData("Intake Power", intakePow );
+
+        if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.a && gamepad1.dpad_up) {
+            telemetry.addData("When the imposter is sus", armPow);
+        }
     }
 
     /** Code to run ONCE after the driver hits STOP. */
