@@ -106,8 +106,8 @@ public class ImprovedTeleOp extends OpMode
 
         /* Most robots need the motor on one side to be reversed to drive forward.
          * Reverse the motor that runs backwards when connected directly to the battery. */
-        frontL.setDirection(DcMotor.Direction.FORWARD);
-        backL.setDirection(DcMotor.Direction.FORWARD);
+        frontL.setDirection(DcMotor.Direction.REVERSE);
+        backL.setDirection(DcMotor.Direction.REVERSE);
         frontR.setDirection(DcMotor.Direction.REVERSE);
         backR.setDirection(DcMotor.Direction.REVERSE);
         intakeL.setDirection(CRServo.Direction.REVERSE);
@@ -246,8 +246,8 @@ public class ImprovedTeleOp extends OpMode
         intakeR.setPower(intakePow);
         intakeL.setPower(intakePow);
         duckWheel.setPower(duckPower);
-        extender.setPower(extension * 0.5);
-        arm.setPower(armMove);
+        extender.setPower(extension * 0.4);
+        arm.setPower(armMove * 0.750000000);
 
         /**  Show the elapsed game time and wheel power. */
         telemetry.addData("Status", "Run Time: " + runtime.toString());
