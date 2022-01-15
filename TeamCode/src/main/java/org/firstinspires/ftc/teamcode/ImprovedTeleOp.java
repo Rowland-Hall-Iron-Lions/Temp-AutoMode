@@ -165,7 +165,7 @@ public class ImprovedTeleOp extends OpMode
         */
         if (isDuckR) {
             if (!duckOn){
-                duckPower = 0.5;
+                duckPower = 0.4;
                 duckOn = true;
 
             }
@@ -177,7 +177,7 @@ public class ImprovedTeleOp extends OpMode
 
         if (isDuckL) {
             if (!duckOn){
-                duckPower = -0.5;
+                duckPower = -0.4;
                 duckOn = true;
 
             }
