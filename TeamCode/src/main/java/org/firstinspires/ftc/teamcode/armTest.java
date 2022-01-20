@@ -27,11 +27,10 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="Improved TeleOP TeleOp", group="Iterative Opmode")
 
 // @Disabled
-public class ImprovedTeleOp extends OpMode
+public class armTest extends OpMode
 {
     /** Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor duckWheel = null;
     private DcMotor frontL = null;
     private DcMotor frontR = null;
     private DcMotor backL = null;
@@ -50,7 +49,6 @@ public class ImprovedTeleOp extends OpMode
         /** Initialize the hardware variables. Note that the strings used here as parameters
          * to 'get' must correspond to the names assigned during the robot configuration
          * step (using the FTC Robot Controller app on the phone). */
-        duckWheel = hardwareMap.get(DcMotor.class, "duckWheel");
         frontL  = hardwareMap.get(DcMotor.class, "leftFront");
         frontR = hardwareMap.get(DcMotor.class, "rightFront");
         backL  = hardwareMap.get(DcMotor.class, "leftRear");
@@ -67,6 +65,8 @@ public class ImprovedTeleOp extends OpMode
         frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         /* makes the motors break on zero power */
         frontR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -85,7 +85,7 @@ public class ImprovedTeleOp extends OpMode
         backR.setDirection(DcMotor.Direction.REVERSE);
         intakeL.setDirection(CRServo.Direction.REVERSE);
         intakeR.setDirection(CRServo.Direction.FORWARD);
-        duckWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
 
 
@@ -109,7 +109,12 @@ public class ImprovedTeleOp extends OpMode
     }
     boolean intakeOn = false;
     boolean duckOn = false;
+    boolean armUp;
+    boolean armResting;
+    boolean armIntake;
     double armPow = 0;
+
+
 
 
 
@@ -130,20 +135,22 @@ public class ImprovedTeleOp extends OpMode
 
 
 
+
         /* More variable setup*/
         double drive = -gamepad1.right_stick_y;
         double turn  =  gamepad1.left_stick_x * 0.5;
-        double strafe = gamepad1.right_stick_x;
+        //double strafe = gamepad1.right_stick_x;
         double isIntakeA = gamepad2.left_trigger;
         double isIntakeB = gamepad2.right_trigger;
-        boolean isDuckR = gamepad1.right_bumper;
-        boolean isDuckL = gamepad1.left_bumper;
-        double duckPower= 0;
         double extension = gamepad2.right_stick_y;
         double armMove = gamepad2.left_stick_y;
+        boolean isTop = gamepad2.dpad_up;
 
 
-
+        if (isTop){
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setTargetPosition(3);
+        }
 
         if (isIntakeA !=0) {
             intakePow = isIntakeA;
@@ -154,62 +161,19 @@ public class ImprovedTeleOp extends OpMode
         else intakePow = 0;
 
 
-       /* if (extension == 0){
-            armPow=0.001;
-
-
-        }
-
-
-        else armPow= armMove * 0.5;
-        */
-        if (isDuckR) {
-            if (!duckOn){
-                duckPower = 0.4;
-                duckOn = true;
-
-            }
-            else if (duckOn) {
-                duckPower = 0;
-                duckOn = false;
-            }
-        }
-
-        if (isDuckL) {
-            if (!duckOn){
-                duckPower = -0.4;
-                duckOn = true;
-
-            }
-            else if (duckOn) {
-                duckPower = 0;
-                duckOn = false;
-            }
-        }
 
 
 
-         if (drive != 0 || turn != 0) {
+
+
+
+
             leftFPower = Range.clip(drive + turn, -1.0, 1.0);
             rightFPower = Range.clip(drive - turn, -1.0, 1.0);
             leftBPower = Range.clip(drive + turn, -1.0, 1.0);
             rightBPower = Range.clip(drive - turn, -1.0, 1.0);
-        }
 
-         else if (strafe != 0 ) {
-            /* Strafing */
-            leftFPower = -strafe;
-            rightFPower = strafe;
-            leftBPower =  strafe;
-            rightBPower = -strafe;
-        }
 
-        else {
-            leftFPower = 0;
-            rightFPower = 0;
-            leftBPower = 0;
-            rightBPower = 0;
-        }
 
 
 
@@ -222,7 +186,6 @@ public class ImprovedTeleOp extends OpMode
         backR.setPower(rightBPower);
         intakeR.setPower(intakePow);
         intakeL.setPower(intakePow);
-        duckWheel.setPower(duckPower);
         extender.setPower(extension * 0.4);
         arm.setPower(armMove * 0.750000000);
 
