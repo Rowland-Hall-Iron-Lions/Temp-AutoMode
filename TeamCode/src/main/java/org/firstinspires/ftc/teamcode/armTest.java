@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -24,21 +25,21 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list. */
 
 
-@TeleOp(name="Improved TeleOP TeleOp", group="Iterative Opmode")
+@TeleOp(name="armTest", group="Iterative Opmode")
 
 // @Disabled
 public class armTest extends OpMode
 {
     /** Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor frontL = null;
-    private DcMotor frontR = null;
-    private DcMotor backL = null;
-    private DcMotor backR = null;
+    private DcMotorEx frontL = null;
+    private DcMotorEx frontR = null;
+    private DcMotorEx backL = null;
+    private DcMotorEx backR = null;
     private CRServo intakeL = null;
     private CRServo intakeR = null;
-    private DcMotor extender = null;
-    private DcMotor arm = null;
+    private DcMotorEx extender = null;
+    private DcMotorEx arm = null;
 
 
     /** Code to run ONCE when the driver hits INIT. */
@@ -49,14 +50,14 @@ public class armTest extends OpMode
         /** Initialize the hardware variables. Note that the strings used here as parameters
          * to 'get' must correspond to the names assigned during the robot configuration
          * step (using the FTC Robot Controller app on the phone). */
-        frontL  = hardwareMap.get(DcMotor.class, "leftFront");
-        frontR = hardwareMap.get(DcMotor.class, "rightFront");
-        backL  = hardwareMap.get(DcMotor.class, "leftRear");
-        backR = hardwareMap.get(DcMotor.class, "rightRear");
+        frontL  = hardwareMap.get(DcMotorEx.class, "leftFront");
+        frontR = hardwareMap.get(DcMotorEx.class, "rightFront");
+        backL  = hardwareMap.get(DcMotorEx.class, "leftRear");
+        backR = hardwareMap.get(DcMotorEx.class, "rightRear");
         intakeL = hardwareMap.get(CRServo.class, "intakeL");
         intakeR = hardwareMap.get(CRServo.class, "intakeR");
-        extender = hardwareMap.get(DcMotor.class, "extender");
-        arm = hardwareMap.get(DcMotor.class, "arm");
+        extender = hardwareMap.get(DcMotorEx.class, "extender");
+        arm = hardwareMap.get(DcMotorEx.class, "arm");
 
 
 
@@ -145,6 +146,7 @@ public class armTest extends OpMode
         double extension = gamepad2.right_stick_y;
         double armMove = gamepad2.left_stick_y;
         boolean isTop = gamepad2.dpad_up;
+        boolean isBottom = gamepad2.dpad_down;
 
 
         if (isTop){
