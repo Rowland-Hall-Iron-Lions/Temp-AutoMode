@@ -24,7 +24,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list. */
 
 
-@TeleOp(name="Improved TeleOP TeleOp", group="Iterative Opmode")
+@TeleOp(name="armTest", group="Iterative Opmode")
 
 // @Disabled
 public class armTest extends OpMode
@@ -145,6 +145,7 @@ public class armTest extends OpMode
         double extension = gamepad2.right_stick_y;
         double armMove = gamepad2.left_stick_y;
         boolean isTop = gamepad2.dpad_up;
+        boolean isBottom = gamepad2.dpad_down;
 
 
         if (isTop){

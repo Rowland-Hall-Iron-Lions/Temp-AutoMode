@@ -224,7 +224,7 @@ public class ImprovedTeleOp extends OpMode
         intakeL.setPower(intakePow);
         duckWheel.setPower(duckPower);
         extender.setPower(extension * 0.4);
-        arm.setPower(armMove * 0.750000000);
+        arm.setPower(armMove * 1);
 
         /**  Show the elapsed game time and wheel power. */
         telemetry.addData("Status", "Run Time: " + runtime.toString());
