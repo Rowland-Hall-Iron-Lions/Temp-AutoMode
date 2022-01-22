@@ -85,7 +85,7 @@ public class ImprovedTeleOp extends OpMode
         /* Most robots need the motor on one side to be reversed to drive forward.
          * Reverse the motor that runs backwards when connected directly to the battery. */
         frontL.setDirection(DcMotor.Direction.REVERSE);
-        backL.setDirection(DcMotor.Direction.REVERSE);
+        backL.setDirection(DcMotor.Direction.FORWARD);
         frontR.setDirection(DcMotor.Direction.REVERSE);
         backR.setDirection(DcMotor.Direction.REVERSE);
         intakeL.setDirection(CRServo.Direction.REVERSE);
@@ -166,14 +166,13 @@ public class ImprovedTeleOp extends OpMode
 
 
         if (liftIntakeUp) {
-            liftPow = 0.08;
+            liftPow = 1;
         }
         else if (liftIntakeDown) {
-            liftPow = 0.08;
+            liftPow = 1;
         }
 
         else liftPow = 0;
-
 
        /* if (extension == 0){
             armPow=0.001;
@@ -186,7 +185,7 @@ public class ImprovedTeleOp extends OpMode
         */
         if (isDuckR) {
             if (!duckOn){
-                duckPower = 0.4;
+                duckPower = 0.5;
                 duckOn = true;
 
             }
@@ -198,7 +197,7 @@ public class ImprovedTeleOp extends OpMode
 
         if (isDuckL) {
             if (!duckOn){
-                duckPower = -0.4;
+                duckPower = -0.5;
                 duckOn = true;
 
             }
@@ -255,6 +254,7 @@ public class ImprovedTeleOp extends OpMode
         telemetry.addData("Intake Power", intakePow );
         telemetry.addData("Arm Power", arm.getPowerFloat());
         telemetry.addData("Extension Power", extender.getPowerFloat());
+        telemetry.addData("Intake lift", liftPow);
 
         if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.a && gamepad1.dpad_up) {
             telemetry.addData("When the imposter is sus", armPow);
