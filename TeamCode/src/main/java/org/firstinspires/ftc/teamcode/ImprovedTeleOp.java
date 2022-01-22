@@ -40,6 +40,8 @@ public class ImprovedTeleOp extends OpMode
     private CRServo intakeR = null;
     private DcMotor extender = null;
     private DcMotor arm = null;
+    private CRServo lIntakeLift = null;
+    private CRServo rIntakeLift = null;
 
 
     /** Code to run ONCE when the driver hits INIT. */
@@ -59,6 +61,9 @@ public class ImprovedTeleOp extends OpMode
         intakeR = hardwareMap.get(CRServo.class, "intakeR");
         extender = hardwareMap.get(DcMotor.class, "extender");
         arm = hardwareMap.get(DcMotor.class, "arm");
+        lIntakeLift = hardwareMap.get(CRServo.class, "intakeLiftL");
+        rIntakeLift = hardwareMap.get(CRServo.class, "intakeLiftR");
+
 
 
 
@@ -80,12 +85,14 @@ public class ImprovedTeleOp extends OpMode
         /* Most robots need the motor on one side to be reversed to drive forward.
          * Reverse the motor that runs backwards when connected directly to the battery. */
         frontL.setDirection(DcMotor.Direction.REVERSE);
-        backL.setDirection(DcMotor.Direction.REVERSE);
+        backL.setDirection(DcMotor.Direction.FORWARD);
         frontR.setDirection(DcMotor.Direction.REVERSE);
         backR.setDirection(DcMotor.Direction.REVERSE);
         intakeL.setDirection(CRServo.Direction.REVERSE);
         intakeR.setDirection(CRServo.Direction.FORWARD);
         duckWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        lIntakeLift.setDirection(CRServo.Direction.REVERSE);
+        rIntakeLift.setDirection(CRServo.Direction.FORWARD);
 
 
 
@@ -110,6 +117,7 @@ public class ImprovedTeleOp extends OpMode
     boolean intakeOn = false;
     boolean duckOn = false;
     double armPow = 0;
+    double liftPow = 0;
 
 
 
@@ -141,6 +149,9 @@ public class ImprovedTeleOp extends OpMode
         double duckPower= 0;
         double extension = gamepad2.right_stick_y;
         double armMove = gamepad2.left_stick_y;
+        boolean liftIntakeUp = gamepad2.dpad_up;
+        boolean liftIntakeDown = gamepad2.dpad_down;
+
 
 
 
@@ -154,6 +165,15 @@ public class ImprovedTeleOp extends OpMode
         else intakePow = 0;
 
 
+        if (liftIntakeUp) {
+            liftPow = 1;
+        }
+        else if (liftIntakeDown) {
+            liftPow = 1;
+        }
+
+        else liftPow = 0;
+
        /* if (extension == 0){
             armPow=0.001;
 
@@ -165,7 +185,7 @@ public class ImprovedTeleOp extends OpMode
         */
         if (isDuckR) {
             if (!duckOn){
-                duckPower = 0.4;
+                duckPower = 0.5;
                 duckOn = true;
 
             }
@@ -177,7 +197,7 @@ public class ImprovedTeleOp extends OpMode
 
         if (isDuckL) {
             if (!duckOn){
-                duckPower = -0.4;
+                duckPower = -0.5;
                 duckOn = true;
 
             }
@@ -225,6 +245,8 @@ public class ImprovedTeleOp extends OpMode
         duckWheel.setPower(duckPower);
         extender.setPower(extension * 0.4);
         arm.setPower(armMove * 1);
+        lIntakeLift.setPower(liftPow);
+        rIntakeLift.setPower(liftPow);
 
         /**  Show the elapsed game time and wheel power. */
         telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -232,6 +254,7 @@ public class ImprovedTeleOp extends OpMode
         telemetry.addData("Intake Power", intakePow );
         telemetry.addData("Arm Power", arm.getPowerFloat());
         telemetry.addData("Extension Power", extender.getPowerFloat());
+        telemetry.addData("Intake lift", liftPow);
 
         if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.a && gamepad1.dpad_up) {
             telemetry.addData("When the imposter is sus", armPow);
