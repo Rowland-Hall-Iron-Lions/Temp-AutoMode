@@ -40,6 +40,8 @@ public class ImprovedTeleOp extends OpMode
     private CRServo intakeR = null;
     private DcMotor extender = null;
     private DcMotor arm = null;
+    private CRServo lIntakeLift = null;
+    private CRServo rIntakeLift = null;
 
 
     /** Code to run ONCE when the driver hits INIT. */
@@ -59,6 +61,9 @@ public class ImprovedTeleOp extends OpMode
         intakeR = hardwareMap.get(CRServo.class, "intakeR");
         extender = hardwareMap.get(DcMotor.class, "extender");
         arm = hardwareMap.get(DcMotor.class, "arm");
+        lIntakeLift = hardwareMap.get(CRServo.class, "intakeLiftL");
+        rIntakeLift = hardwareMap.get(CRServo.class, "intakeLiftR");
+
 
 
 
@@ -86,6 +91,8 @@ public class ImprovedTeleOp extends OpMode
         intakeL.setDirection(CRServo.Direction.REVERSE);
         intakeR.setDirection(CRServo.Direction.FORWARD);
         duckWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        lIntakeLift.setDirection(CRServo.Direction.REVERSE);
+        rIntakeLift.setDirection(CRServo.Direction.FORWARD);
 
 
 
@@ -110,6 +117,7 @@ public class ImprovedTeleOp extends OpMode
     boolean intakeOn = false;
     boolean duckOn = false;
     double armPow = 0;
+    double liftPow = 0;
 
 
 
@@ -141,6 +149,9 @@ public class ImprovedTeleOp extends OpMode
         double duckPower= 0;
         double extension = gamepad2.right_stick_y;
         double armMove = gamepad2.left_stick_y;
+        boolean liftIntakeUp = gamepad2.dpad_up;
+        boolean liftIntakeDown = gamepad2.dpad_down;
+
 
 
 
@@ -152,6 +163,16 @@ public class ImprovedTeleOp extends OpMode
             intakePow = -1 * isIntakeB;
         }
         else intakePow = 0;
+
+
+        if (liftIntakeUp) {
+            liftPow = 0.08;
+        }
+        else if (liftIntakeDown) {
+            liftPow = 0.08;
+        }
+
+        else liftPow = 0;
 
 
        /* if (extension == 0){
@@ -225,6 +246,8 @@ public class ImprovedTeleOp extends OpMode
         duckWheel.setPower(duckPower);
         extender.setPower(extension * 0.4);
         arm.setPower(armMove * 1);
+        lIntakeLift.setPower(liftPow);
+        rIntakeLift.setPower(liftPow);
 
         /**  Show the elapsed game time and wheel power. */
         telemetry.addData("Status", "Run Time: " + runtime.toString());
