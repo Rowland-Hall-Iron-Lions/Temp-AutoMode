@@ -11,7 +11,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-@Autonomous(name="autoBlueRight")
+
+@Autonomous
 public class autoBlueRight extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -48,7 +49,7 @@ public class autoBlueRight extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(-58, 58, Math.toRadians(0)))
                 .build();
         // Trajectory to park  our robot fully within the team "box".
-        // This scores extra points
+        // This trajectory scores extra points for parking inside the area(s)
         Trajectory park = drive.trajectoryBuilder(drive.getPoseEstimate())
                 .strafeRight(23)
                 .build();
