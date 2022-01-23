@@ -118,6 +118,9 @@ public class ImprovedTeleOp extends OpMode
     boolean duckOn = false;
     double armPow = 0;
     double liftPow = 0;
+    int speed = 0;
+    double slowSpeed = 0.25;
+    double normalSpeed = 0.69;
 
 
 
@@ -140,7 +143,7 @@ public class ImprovedTeleOp extends OpMode
 
         /* More variable setup*/
         double drive = -gamepad1.right_stick_y;
-        double turn  =  gamepad1.left_stick_x * 0.5;
+        double turn  =  gamepad1.left_stick_x * 0.3;
         double strafe = gamepad1.right_stick_x;
         double isIntakeA = gamepad2.left_trigger;
         double isIntakeB = gamepad2.right_trigger;
@@ -149,12 +152,16 @@ public class ImprovedTeleOp extends OpMode
         double duckPower= 0;
         double extension = gamepad2.right_stick_y;
         double armMove = gamepad2.left_stick_y;
+        boolean toggleFastMode = gamepad1.dpad_up;
+        boolean toggleSlowMode = gamepad1.dpad_down;
        // boolean liftIntakeUp = gamepad2.dpad_up;
         //boolean liftIntakeDown = gamepad2.dpad_down;
 
 
 
+    if (toggleFastMode) { speed = 1;} // I know the brackets are unnecessary but I like them.
 
+    if (toggleSlowMode) {speed = -1;}
 
         if (isIntakeA !=0) {
             intakePow = isIntakeA;
@@ -235,18 +242,45 @@ public class ImprovedTeleOp extends OpMode
 
 
 
+        if (speed == 1) {
 
-        frontL.setPower(leftFPower);
-        backL.setPower(leftBPower);
-        frontR.setPower(rightFPower);
-        backR.setPower(rightBPower);
-        intakeR.setPower(intakePow);
-        intakeL.setPower(intakePow);
-        duckWheel.setPower(duckPower);
-        extender.setPower(extension);
-        arm.setPower(armMove * 1);
-        //lIntakeLift.setPower(liftPow);
-        //rIntakeLift.setPower(liftPow);
+            frontL.setPower(leftFPower);
+            backL.setPower(leftBPower);
+            frontR.setPower(rightFPower);
+            backR.setPower(rightBPower);
+            intakeR.setPower(intakePow);
+            intakeL.setPower(intakePow);
+            duckWheel.setPower(duckPower);
+            extender.setPower(extension);
+            arm.setPower(armMove * 1);
+            //lIntakeLift.setPower(liftPow);
+            //rIntakeLift.setPower(liftPow);
+        }
+
+        else if (speed == -1) {
+            frontL.setPower(leftFPower * slowSpeed);
+            backL.setPower(leftBPower * slowSpeed);
+            frontR.setPower(rightFPower * slowSpeed);
+            backR.setPower(rightBPower * slowSpeed);
+            intakeR.setPower(intakePow);
+            intakeL.setPower(intakePow);
+            duckWheel.setPower(duckPower);
+            extender.setPower(extension);
+            arm.setPower(armMove * 1);
+        }
+
+        else {
+            frontL.setPower(leftFPower * normalSpeed);
+            backL.setPower(leftBPower * normalSpeed);
+            frontR.setPower(rightFPower * normalSpeed);
+            backR.setPower(rightBPower * normalSpeed);
+            intakeR.setPower(intakePow);
+            intakeL.setPower(intakePow);
+            duckWheel.setPower(duckPower);
+            extender.setPower(extension);
+            arm.setPower(armMove * 1);
+        }
+
 
         /**  Show the elapsed game time and wheel power. */
         telemetry.addData("Status", "Run Time: " + runtime.toString());
