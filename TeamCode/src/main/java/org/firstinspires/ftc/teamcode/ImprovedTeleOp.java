@@ -154,6 +154,7 @@ public class ImprovedTeleOp extends OpMode
         double armMove = gamepad2.left_stick_y;
         boolean toggleFastMode = gamepad1.dpad_up;
         boolean toggleSlowMode = gamepad1.dpad_down;
+        boolean toggleNormalMode = gamepad1.a;
        // boolean liftIntakeUp = gamepad2.dpad_up;
         //boolean liftIntakeDown = gamepad2.dpad_down;
 
@@ -162,6 +163,8 @@ public class ImprovedTeleOp extends OpMode
     if (toggleFastMode) { speed = 1;} // I know the brackets are unnecessary but I like them.
 
     if (toggleSlowMode) {speed = -1;}
+
+    if (toggleNormalMode) {speed = 0;}
 
         if (isIntakeA !=0) {
             intakePow = isIntakeA;
@@ -269,7 +272,19 @@ public class ImprovedTeleOp extends OpMode
             arm.setPower(armMove * 1);
         }
 
-        else {
+        else if (speed == 0) {
+            frontL.setPower(leftFPower * normalSpeed);
+            backL.setPower(leftBPower * normalSpeed);
+            frontR.setPower(rightFPower * normalSpeed);
+            backR.setPower(rightBPower * normalSpeed);
+            intakeR.setPower(intakePow);
+            intakeL.setPower(intakePow);
+            duckWheel.setPower(duckPower);
+            extender.setPower(extension);
+            arm.setPower(armMove * 1);
+        }
+
+        else  {
             frontL.setPower(leftFPower * normalSpeed);
             backL.setPower(leftBPower * normalSpeed);
             frontR.setPower(rightFPower * normalSpeed);
