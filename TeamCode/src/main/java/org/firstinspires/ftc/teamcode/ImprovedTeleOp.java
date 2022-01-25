@@ -40,6 +40,8 @@ public class ImprovedTeleOp extends OpMode
     private CRServo intakeR = null;
     private DcMotor extender = null;
     private DcMotor arm = null;
+    //private CRServo lIntakeLift = null;
+    //private CRServo rIntakeLift = null;
 
 
     /** Code to run ONCE when the driver hits INIT. */
@@ -59,6 +61,9 @@ public class ImprovedTeleOp extends OpMode
         intakeR = hardwareMap.get(CRServo.class, "intakeR");
         extender = hardwareMap.get(DcMotor.class, "extender");
         arm = hardwareMap.get(DcMotor.class, "arm");
+       // lIntakeLift = hardwareMap.get(CRServo.class, "intakeLiftL");
+        //rIntakeLift = hardwareMap.get(CRServo.class, "intakeLiftR");
+
 
 
 
@@ -80,12 +85,14 @@ public class ImprovedTeleOp extends OpMode
         /* Most robots need the motor on one side to be reversed to drive forward.
          * Reverse the motor that runs backwards when connected directly to the battery. */
         frontL.setDirection(DcMotor.Direction.REVERSE);
-        backL.setDirection(DcMotor.Direction.REVERSE);
+        backL.setDirection(DcMotor.Direction.FORWARD);
         frontR.setDirection(DcMotor.Direction.REVERSE);
         backR.setDirection(DcMotor.Direction.REVERSE);
         intakeL.setDirection(CRServo.Direction.REVERSE);
         intakeR.setDirection(CRServo.Direction.FORWARD);
         duckWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+      //  lIntakeLift.setDirection(CRServo.Direction.REVERSE);
+        //rIntakeLift.setDirection(CRServo.Direction.FORWARD);
 
 
 
@@ -110,6 +117,10 @@ public class ImprovedTeleOp extends OpMode
     boolean intakeOn = false;
     boolean duckOn = false;
     double armPow = 0;
+    double liftPow = 0;
+    int speed = 0;
+    double slowSpeed = 0.25;
+    double normalSpeed = 0.69;
 
 
 
@@ -132,7 +143,7 @@ public class ImprovedTeleOp extends OpMode
 
         /* More variable setup*/
         double drive = -gamepad1.right_stick_y;
-        double turn  =  gamepad1.left_stick_x * 0.5;
+        double turn  =  gamepad1.left_stick_x * 0.3;
         double strafe = gamepad1.right_stick_x;
         double isIntakeA = gamepad2.left_trigger;
         double isIntakeB = gamepad2.right_trigger;
@@ -141,9 +152,16 @@ public class ImprovedTeleOp extends OpMode
         double duckPower= 0;
         double extension = gamepad2.right_stick_y;
         double armMove = gamepad2.left_stick_y;
+        boolean toggleFastMode = gamepad1.dpad_up;
+        boolean toggleSlowMode = gamepad1.dpad_down;
+       // boolean liftIntakeUp = gamepad2.dpad_up;
+        //boolean liftIntakeDown = gamepad2.dpad_down;
 
 
 
+    if (toggleFastMode) { speed = 1;} // I know the brackets are unnecessary but I like them.
+
+    if (toggleSlowMode) {speed = -1;}
 
         if (isIntakeA !=0) {
             intakePow = isIntakeA;
@@ -154,6 +172,15 @@ public class ImprovedTeleOp extends OpMode
         else intakePow = 0;
 
 
+      /*  if (liftIntakeUp) {
+            liftPow = 1;
+        }
+        else if (liftIntakeDown) {
+            liftPow = -1;
+        }
+
+        else liftPow = 0;
+*/
        /* if (extension == 0){
             armPow=0.001;
 
@@ -165,7 +192,7 @@ public class ImprovedTeleOp extends OpMode
         */
         if (isDuckR) {
             if (!duckOn){
-                duckPower = 0.4;
+                duckPower = 0.5;
                 duckOn = true;
 
             }
@@ -177,7 +204,7 @@ public class ImprovedTeleOp extends OpMode
 
         if (isDuckL) {
             if (!duckOn){
-                duckPower = -0.4;
+                duckPower = -0.5;
                 duckOn = true;
 
             }
@@ -215,16 +242,45 @@ public class ImprovedTeleOp extends OpMode
 
 
 
+        if (speed == 1) {
 
-        frontL.setPower(leftFPower);
-        backL.setPower(leftBPower);
-        frontR.setPower(rightFPower);
-        backR.setPower(rightBPower);
-        intakeR.setPower(intakePow);
-        intakeL.setPower(intakePow);
-        duckWheel.setPower(duckPower);
-        extender.setPower(extension * 0.4);
-        arm.setPower(armMove * 1);
+            frontL.setPower(leftFPower);
+            backL.setPower(leftBPower);
+            frontR.setPower(rightFPower);
+            backR.setPower(rightBPower);
+            intakeR.setPower(intakePow);
+            intakeL.setPower(intakePow);
+            duckWheel.setPower(duckPower);
+            extender.setPower(extension);
+            arm.setPower(armMove * 1);
+            //lIntakeLift.setPower(liftPow);
+            //rIntakeLift.setPower(liftPow);
+        }
+
+        else if (speed == -1) {
+            frontL.setPower(leftFPower * slowSpeed);
+            backL.setPower(leftBPower * slowSpeed);
+            frontR.setPower(rightFPower * slowSpeed);
+            backR.setPower(rightBPower * slowSpeed);
+            intakeR.setPower(intakePow);
+            intakeL.setPower(intakePow);
+            duckWheel.setPower(duckPower);
+            extender.setPower(extension);
+            arm.setPower(armMove * 1);
+        }
+
+        else {
+            frontL.setPower(leftFPower * normalSpeed);
+            backL.setPower(leftBPower * normalSpeed);
+            frontR.setPower(rightFPower * normalSpeed);
+            backR.setPower(rightBPower * normalSpeed);
+            intakeR.setPower(intakePow);
+            intakeL.setPower(intakePow);
+            duckWheel.setPower(duckPower);
+            extender.setPower(extension);
+            arm.setPower(armMove * 1);
+        }
+
 
         /**  Show the elapsed game time and wheel power. */
         telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -232,6 +288,7 @@ public class ImprovedTeleOp extends OpMode
         telemetry.addData("Intake Power", intakePow );
         telemetry.addData("Arm Power", arm.getPowerFloat());
         telemetry.addData("Extension Power", extender.getPowerFloat());
+        telemetry.addData("Intake lift", liftPow);
 
         if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.a && gamepad1.dpad_up) {
             telemetry.addData("When the imposter is sus", armPow);
